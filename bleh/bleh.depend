@@ -1,5 +1,6 @@
 # depslib dependency file v1.0
-1751594450 source:c:\users\andré mateus\documents\coisas de colégio\uerj\1° período\2- construção de algoritmos\c\bleh\main.c
+1751640415 source:c:\users\andré mateus\documents\coisas de colégio\uerj\1° período\2- construção de algoritmos\c\bleh\main.c
 	<stdio.h>
 	<stdlib.h>
+	<locale.h>
 
