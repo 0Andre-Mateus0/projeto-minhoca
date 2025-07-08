@@ -1,3 +1,9 @@
+/*
+    Alunos:
+    André Mateus Machado dos Santos Soares - 202510300211
+    Giorgio Carlos Serra Bazet - 202510298111
+*/
+
 //Headers
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,7 +39,6 @@ int main() {
     telaInstrucao();
     telaComando(tab);
     passeioDaMinhocaDesgovernada(tab,minhoca);
-
   return 0;
 }
 
@@ -52,7 +57,7 @@ void telaTitulo() {
     int tamArr = sizeof(titulo)/sizeof(titulo[0]);
 
     //Título
-    printf("Trabalho feito por:\nAndré Mateus (202510300211)\nGiorgio Bazet(202510298111)");
+    printf("Trabalho feito por:\nAndré Mateus (202510300211)\nGiorgio Carlos Serra Bazet(202510298111)");
     for(int i = 0; i < 10; i++) { printf("\n"); }
     for(int i = 0; i < tamArr; i++) {
         for(int  j = 0; j < 10; j++) { printf(" "); }
@@ -157,7 +162,7 @@ void telaComando(char matriz[tamTab][tamTab]) {
 
 //Minhoca cabeçuda
 void passeioDaMinhocaDesgovernada(char matriz[tamTab][tamTab], const char *minhoca) {
-    int cabecaX = 0, cabecaY = 0, posVal = 0, qtdMov = 0, corpoX[100] = {0}, corpoY[100] = {0}, tamMinhoca = strlen(minhoca), casasVisitadas = 0, casasNVisitadas = 0; tamAtual = 1
+    int cabecaX = 0, cabecaY = 0, posVal = 0, qtdMov = 0, corpoX[100] = {0}, corpoY[100] = {0}, tamMinhoca = strlen(minhoca), casasVisitadas = 0, casasNVisitadas = 0, tamAtual = 1;
 
 
     char matrizVisitadas[tamTab][tamTab]; //Cópia da matriz original para guardar as casas visitadas
@@ -218,7 +223,7 @@ void passeioDaMinhocaDesgovernada(char matriz[tamTab][tamTab], const char *minho
     corpoX[0] = cabecaX-1;
     corpoY[0] = cabecaY-1;
     matriz[cabecaX-1][cabecaY-1] = minhoca[0];
-    matriz[corpoX[0]][corpoY[0]] = minhoca[0];
+    matrizVisitadas[cabecaX-1][cabecaY-1] = 'V';
 
     //Movimentação automática
     srand(time(NULL)); //Inicializa o RNG
@@ -249,7 +254,7 @@ void passeioDaMinhocaDesgovernada(char matriz[tamTab][tamTab], const char *minho
 
             // Verifica se o movimento é válido
             if(novaX >= 0 && novaX < tamTab && novaY >= 0 && novaY < tamTab) {
-                if(matriz[novaX][novaY] == ' ' || matriz[novaX][novaY] == minhoca[tamMinhoca-1]) { movVal = 1; }
+                if(matrizOriginal[novaX][novaY] != 'O' && matriz[novaX][novaY] == ' ' || matriz[novaX][novaY] == minhoca[tamMinhoca-1]) { movVal = 1; }
             }
         }
 
@@ -258,6 +263,9 @@ void passeioDaMinhocaDesgovernada(char matriz[tamTab][tamTab], const char *minho
             novaX = corpoX[0];
             novaY = corpoY[0];
         }
+
+        //Limpar a posição da última parte do corpo da minhoca
+        if(tamAtual >= tamMinhoca) { matriz[corpoX[tamAtual-1]][corpoY[tamAtual-1]] = ' '; }
 
         //Move a minhoca
         for(int i = tamMinhoca-1; i > 0; i--) {
@@ -268,24 +276,27 @@ void passeioDaMinhocaDesgovernada(char matriz[tamTab][tamTab], const char *minho
         corpoY[0] = novaY;
 
         // Aumenta o tamanho da minhoca gradualmente até o máximo
-        if(tamAtual < tamMinhoca && mov > 0) { tamAtual++; }
+        if(tamAtual < tamMinhoca) { tamAtual++; }
 
-        //Atualiza o tabuleiro
+        // Atualiza o tabuleiro - limpa todas as partes antigas da minhoca
         for(int i = 0; i < tamTab; i++) {
             for(int j = 0; j < tamTab; j++) {
-                if(matrizOriginal[i][j] == 'O') {
-                    matriz[i][j] = 'O'; // Restaura obstáculos
-                } else if(matriz[i][j] != minhoca[0] &&
-                         (strchr(minhoca+1, matriz[i][j]) == NULL)) {
-                    matriz[i][j] = ' '; // Limpa apenas partes da minhoca
-                }
+                if(matrizOriginal[i][j] != 'O' && strchr(minhoca, matriz[i][j]) != NULL) { matriz[i][j] = ' '; }
             }
         }
+
         //Desenha a minhoca
         for(int i = 0; i < tamMinhoca; i++) {
             if(i == 0) { matriz[corpoX[i]][corpoY[i]] = minhoca[0]; } //Cabeça
             else { matriz[corpoX[i]][corpoY[i]] = minhoca[i < tamMinhoca ? i : tamMinhoca-1]; }
             matrizVisitadas[corpoX[i]][corpoY[i]] = 'V'; // Marca como visitada (marcação pro final)
+        }
+
+        // Restaura os obstáculos
+        for(int i = 0; i < tamTab; i++) {
+            for(int j = 0; j < tamTab; j++) {
+                if(matrizOriginal[i][j] == 'O') { matriz[i][j] = 'O'; }
+            }
         }
 
         //Exibe o movimento
@@ -339,10 +350,10 @@ void passeioDaMinhocaDesgovernada(char matriz[tamTab][tamTab], const char *minho
 
     //Mostra o resultado final
     for(int i = 0; i < 2; i++) { printf("\n"); }
-    for(int i = 0; i < 40; i++) { printf(" ");}
+    for(int i = 0; i < 50; i++) { printf(" ");}
     printf("=== RESULTADO FINAL ===\n");
-    for(int i = 0; i < 30; i++) { printf(" ");}
+    for(int i = 0; i < 45; i++) { printf(" ");}
     printf("Casas visitadas: %d\n", casasVisitadas);
-    for(int i = 0; i < 30; i++) { printf(" ");}
+    for(int i = 0; i < 45; i++) { printf(" ");}
     printf("Casas não visitadas: %d\n", casasNVisitadas);
 }
