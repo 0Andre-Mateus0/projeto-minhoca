@@ -4,3 +4,11 @@
 	<stdlib.h>
 	<locale.h>
 
+1751939869 source:c:\users\andré mateus\documents\github\projeto-minhoca\bleh\main.c
+	<stdio.h>
+	<stdlib.h>
+	<locale.h>
+	<string.h>
+	<time.h>
+	<unistd.h>
+
